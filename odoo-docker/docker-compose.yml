@@ -1,6 +1,6 @@
 services:
   odoo:
-    image: odoo:17.0
+    image: odoo:18.0
     depends_on:
       - db
     ports:
@@ -31,4 +31,6 @@ services:
 
 volumes:
   odoo-web-data:
+    name: odoo-18-docker_odoo-web-data
   odoo-db-data:
+    name: odoo-18-docker_odoo-db-data
