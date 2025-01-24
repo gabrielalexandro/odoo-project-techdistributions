@@ -1,5 +1,4 @@
 odoo-docker/logs/
 odoo-docker/data/
 odoo-docker/db-data/
-odoo-docker/backups/
 odoo-docker/*.log
