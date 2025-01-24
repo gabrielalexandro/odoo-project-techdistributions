@@ -54,7 +54,7 @@ Para iniciar los contenedores de Odoo y PostgreSQL, ejecuta:
 ./run.sh
 ```
 
-Esto iniciará los contenedores en segundo plano.
+Esto iniciará los contenedores en segundo plano y realizará una configuración inicial.
 
 ### 3. Acceso a Odoo 📦
 
@@ -63,12 +63,60 @@ Una vez que los contenedores estén levantados, puedes acceder a Odoo desde tu n
 ```plaintext
 http://localhost:8069
 ```
-### 4. Dar de baja los contenedores
+
+Por defecto, se creará un usuario administrador con:
+- Usuario: **admin**
+- Contraseña: **admin**
+
+Para modificar la contraseña por defecto del administrador, ve a Configuración > Usuarios y edítala.
+
+### 4. Crear una Base de Datos Inicial
+
+Si deseas cargar una base de datos inicial preconfigurada, sigue estos pasos:
+1. Accede a la pantalla de inicio de Odoo.
+2. Haz clic en "Restaurar base de datos".
+3. Sube el archivo `.zip` con la base de datos preconfigurada (ubicada en `backups/` si está disponible).
+
+### 5. Dar de Baja los Contenedores
 
 ```bash
 docker-compose down
 ```
-Esto eliminará los contenedores de Odoo y PostgreSQL, pero conservará la base de datos, configuraciones de Odoo, módulos y logs.
+
+Esto eliminará los contenedores de Odoo y PostgreSQL, pero conservará:
+- La base de datos.
+- Las configuraciones de Odoo.
+- Los módulos personalizados.
+- Los logs.
+
+### 6. Reiniciar los Contenedores
+Si necesitas reiniciar los contenedores sin perder datos:
+```bash
+docker-compose up -d
+```
+
+## Compartir Configuración Inicial
+
+Para colaborar con otros desarrolladores y compartir configuraciones iniciales:
+1. Incluye los módulos personalizados en la carpeta `addons/`.
+2. Guarda copias de seguridad de la base de datos en `backups/`.
+3. Asegúrate de que los archivos esenciales estén en Git.
+
+## Estructura del Proyecto
+
+```plaintext
+odoo-docker/
+├── addons/                  # Directorio para módulos personalizados
+├── backups/                # Copias de seguridad de la base de datos
+├── config/
+│   └── odoo.conf            # Archivo de configuración de Odoo
+├── logs/                    # Logs persistentes de Odoo
+├── data/                    # Datos persistentes de Odoo
+├── db-data/                 # Datos persistentes de PostgreSQL
+├── docker-compose.yml       # Definición de servicios con Docker
+├── run.sh                   # Script para levantar y manejar el entorno
+└── README.md                # Documentación del proyecto
+```
 
 ## Solución de Problemas Comunes
 
@@ -81,3 +129,8 @@ Esto eliminará los contenedores de Odoo y PostgreSQL, pero conservará la base 
    Luego cierra sesión y vuelve a iniciar sesión para que los cambios surtan efecto.
 
 2. **Problemas con el puerto 8069**: Si el puerto 8069 está en uso, puedes cambiarlo en el archivo `docker-compose.yml`.
+
+3. **Errores en los contenedores**: Si los contenedores no levantan correctamente, verifica los logs:
+   ```bash
+   docker-compose logs
+   ```

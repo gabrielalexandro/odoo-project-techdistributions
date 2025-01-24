@@ -1,20 +1,19 @@
-
 #!/usr/bin/env bash
 
+# Levantar contenedores
 docker-compose up -d --build
 
-# Create logs folder if it does not exist
+# Crear carpetas si no existen
 mkdir -p logs
-sudo chmod -R 777 logs
+chmod -R 777 logs
 
-# Max size in bytes
-MAX_SIZE=$((10 * 1024 * 1024)) 
-
-# Verify and rotate log if its necessary
+# Manejar logs rotativos
+MAX_SIZE=$((10 * 1024 * 1024))
 if [[ -f logs/app.log && $(stat -c%s logs/app.log) -ge $MAX_SIZE ]]; then
-    mv logs/app.log logs/app-$(date +"%Y%m%d%H%M%S").log  # Rename file
-    touch logs/app.log  # Create new log file
+    mv logs/app.log logs/app-$(date +"%Y%m%d%H%M%S").log
+    touch logs/app.log
 fi
 
+# Seguimiento de logs
 docker-compose logs -f >> logs/app.log &
-echo "Odoo and PostgreSQL containers successfully created"
+echo "Odoo y PostgreSQL han sido levantados correctamente."

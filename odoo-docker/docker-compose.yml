@@ -1,36 +1,38 @@
 services:
   odoo:
     image: odoo:18.0
+    container_name: odoo
     depends_on:
       - db
     ports:
       - "8069:8069"
     volumes:
-      - odoo-web-data:/var/lib/odoo
-      - ./config:/etc/odoo
-      - ./addons:/mnt/extra-addons
-      - ./logs:/var/log/odoo
+      - odoo-web-data:/var/lib/odoo  # Persistencia de datos Odoo
+      - ./config:/etc/odoo           # Configuración personalizada de Odoo
+      - ./addons:/mnt/extra-addons   # Ruta para módulos personalizados
+      - ./logs:/var/log/odoo         # Logs de Odoo
     environment:
-      - HOST=db
-      - USER=odoo
-      - PASSWORD=odoo
+      - HOST=db                     # Dirección del contenedor de base de datos
+      - USER=odoo                   # Usuario de base de datos
+      - PASSWORD=odoo               # Contraseña de base de datos
     command: odoo -d odoo --db_user=odoo --db_password=odoo -i base
     restart: always
 
   db:
     image: postgres:15
+    container_name: odoo-db
     environment:
-      - POSTGRES_DB=odoo
-      - POSTGRES_USER=odoo
-      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_DB=odoo            # Nombre de la base de datos
+      - POSTGRES_USER=odoo          # Usuario de PostgreSQL
+      - POSTGRES_PASSWORD=odoo      # Contraseña de PostgreSQL
     ports:
       - "5432:5432"
     volumes:
-      - odoo-db-data:/var/lib/postgresql/data
+      - odoo-db-data:/var/lib/postgresql/data # Persistencia de la base de datos
     restart: always
 
 volumes:
   odoo-web-data:
-    name: odoo-18-docker_odoo-web-data
+    name: odoo-18-docker_odoo-web-data  # Persistencia de Odoo
   odoo-db-data:
-    name: odoo-18-docker_odoo-db-data
+    name: odoo-18-docker_odoo-db-data   # Persistencia de PostgreSQL
